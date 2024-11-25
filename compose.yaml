@@ -1,9 +1,9 @@
 services:
   db:
-    env_file: ".env"
+    env_file: '.env'
     image: postgres
     restart: always
-    container_name: ${DB_CONTAINER_NAME}
+    container_name: ${DB_HOST}
     ports:
       - '${DB_PORT}:${DB_PORT}'
     environment:
@@ -12,7 +12,7 @@ services:
       - POSTGRES_USER=${DB_USER}
 
   backend:
-    env_file: ".env"
+    env_file: '.env'
     build:
       context: .
       dockerfile: Dockerfile
