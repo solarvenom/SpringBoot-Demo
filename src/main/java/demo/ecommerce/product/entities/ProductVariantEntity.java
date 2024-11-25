@@ -28,13 +28,21 @@ public class ProductVariantEntity {
 
     private Float price;
 
+    private String sku;
+
+    private String ean;
+
     public ProductVariantEntity(
         ColourEnum colour,
         SizeEnum size,
-        Float price
+        Float price,
+        String sku,
+        String ean
     ) {
         this.colour = colour;
         this.size = size;
         this.price = price;
+        this.sku = sku;
+        this.ean = ean;
     }
 }

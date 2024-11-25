@@ -17,7 +17,7 @@ public class ProductEntity {
     private String name;
     
     private String description;
-
+    
     public ProductEntity(
         String name,
         String description,
