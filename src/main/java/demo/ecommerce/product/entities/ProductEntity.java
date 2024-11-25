@@ -17,11 +17,10 @@ public class ProductEntity {
     private String name;
     
     private String description;
-    
+
     public ProductEntity(
         String name,
-        String description,
-        Float price
+        String description
     ){
         this.name = name;
         this.description = description;

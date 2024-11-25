@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS migration_history (
+CREATE TABLE migration_history (
     id SERIAL PRIMARY KEY,
     filename TEXT NOT NULL UNIQUE,
     applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
