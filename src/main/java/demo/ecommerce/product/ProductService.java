@@ -17,10 +17,7 @@ public class ProductService {
     @Autowired
     private ProductVariantRepository productVariantRepository;
    
-    
     public List<ProductVariantEntity> getAllProducts() {
-        List<ProductVariantEntity> allProducts = this.productVariantRepository.findAll();
-        System.out.println(allProducts);
-        return allProducts;
+        return this.productVariantRepository.findAll();
     }
 }

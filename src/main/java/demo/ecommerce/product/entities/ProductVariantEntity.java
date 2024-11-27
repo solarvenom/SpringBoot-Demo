@@ -1,5 +1,6 @@
 package demo.ecommerce.product.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -7,8 +8,10 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import java.util.UUID;
 
 import demo.ecommerce.product.enums.ColourEnum;
 import demo.ecommerce.product.enums.SizeEnum;
@@ -17,7 +20,6 @@ import demo.ecommerce.product.enums.SizeEnum;
 @Table(name="product_variants")
 public class ProductVariantEntity {
 
-    // @ManyToOne(fetch = FetchType.LAZY)
     @ManyToOne
     @JoinColumn(name="product_id")
     private ProductEntity product;
@@ -25,6 +27,9 @@ public class ProductVariantEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(updatable = false, nullable = false, unique = true, columnDefinition = "UUID")
+    private UUID uuid;
 
     @Enumerated(EnumType.STRING)
     private ColourEnum colour;
@@ -37,6 +42,13 @@ public class ProductVariantEntity {
     private String sku;
 
     private String ean;
+
+    @PrePersist
+    public void generateUuid() {
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
+    }
 
     protected ProductVariantEntity(){}
 
@@ -54,8 +66,8 @@ public class ProductVariantEntity {
         this.ean = ean;
     }
 
-    public Integer getId() {
-        return id;
+    public UUID getUuid(){
+        return uuid;
     }
 
     public ColourEnum getColour() {
@@ -76,5 +88,9 @@ public class ProductVariantEntity {
 
     public String getEan(){
         return ean;
+    }
+
+    public ProductEntity getProduct(){
+        return product;
     }
 }

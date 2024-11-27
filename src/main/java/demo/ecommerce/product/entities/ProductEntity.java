@@ -4,8 +4,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import java.util.UUID;
 
 @Entity
 @Table(name="products")
@@ -15,11 +17,21 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(updatable = false, nullable = false, unique = true, columnDefinition = "UUID")
+    private UUID uuid;
+
     @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)
     private String description;
+
+    @PrePersist
+    public void generateUuid() {
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
+    }
 
     protected ProductEntity(){}
 
@@ -29,6 +41,10 @@ public class ProductEntity {
     ){
         this.name = name;
         this.description = description;
+    }
+
+    public UUID getUuid(){
+        return uuid;
     }
 
     public String getName(){
