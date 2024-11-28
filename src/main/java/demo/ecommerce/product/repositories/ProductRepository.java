@@ -6,4 +6,5 @@ import demo.ecommerce.product.entities.ProductEntity;
 
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
+    boolean existsByName(String name);
 }
