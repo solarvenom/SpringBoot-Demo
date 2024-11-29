@@ -1,4 +1,4 @@
-package demo.ecommerce.api;
+package demo.ecommerce.api.errors;
 import java.time.Instant;
 
 public class ApiError {
