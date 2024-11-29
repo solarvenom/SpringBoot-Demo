@@ -30,8 +30,8 @@ public class ProductController {
   }
 
 	@GetMapping("/products")
-  public List<ProductVariantEntity> getProducts(@RequestParam String searchTerm) {
-    return this.productService.getProducts(searchTerm);
+  public List<ProductEntity> getProducts() {
+    return this.productService.getProducts();
   }
 
   @PostMapping("/products")
@@ -46,17 +46,25 @@ public class ProductController {
     }
   }
 
-  @PostMapping("/products/{productUuid}")
+	@GetMapping("/product-variants")
+  public List<ProductVariantEntity> getProductVariants(@RequestParam String searchTerm) {
+    return this.productService.getProductVariants(searchTerm);
+  }
+
+  @PostMapping("/product-variants")
   public ResponseEntity<?> createProductVariant(
-    @PathVariable UUID productUuid,
     @RequestBody CreateProductVariantDto createProductVariantDto
   ) {
       try {
-        ProductVariantEntity productVariant = this.productService.createProductVariant(productUuid, createProductVariantDto);
+        ProductVariantEntity productVariant = this.productService.createProductVariant(createProductVariantDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(productVariant);
       } catch(IllegalArgumentException e){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
-          new ApiError(HttpStatus.CONFLICT.value(), "Conflict", e.getMessage(), "@Post /products/"+productUuid)
+          new ApiError(
+            HttpStatus.CONFLICT.value(), 
+            "Conflict", e.getMessage(), 
+            "@Post /products/"+createProductVariantDto.getProductUuid()
+          )
         );
       }
   }

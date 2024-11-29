@@ -22,12 +22,8 @@ public class ProductService {
     @Autowired
     private ProductVariantRepository productVariantRepository;
    
-    public List<ProductVariantEntity> getProducts(String searchTerm) {
-        if(searchTerm != null){
-            return this.productVariantRepository.findBySearchTerm(searchTerm);
-        } else {
-            return this.productVariantRepository.findAll();
-        }
+    public List<ProductEntity> getProducts() {
+        return this.productRepository.findAll();
     }
 
     public ProductEntity createProduct(ProductDto productDto){
@@ -38,10 +34,18 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    public List<ProductVariantEntity> getProductVariants(String searchTerm) {
+        if(searchTerm != null){
+            return this.productVariantRepository.findBySearchTerm(searchTerm);
+        }
+        return this.productVariantRepository.findAll();
+    }
+
     public ProductVariantEntity createProductVariant(
-        UUID productUuid,
         CreateProductVariantDto createProductVariantDto
     ){
+        UUID productUuid = createProductVariantDto.getProductUuid();
+
         if(productVariantRepository.existsBySizeAndColourAndPrice(
             productUuid, 
             createProductVariantDto.getSize(),

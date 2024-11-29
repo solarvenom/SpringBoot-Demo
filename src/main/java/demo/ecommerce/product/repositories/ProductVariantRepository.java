@@ -25,7 +25,7 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariantEn
         "SELECT CASE WHEN COUNT(pv) > 0 THEN true ELSE false END " +
         "FROM ProductVariantEntity pv " + 
         "JOIN pv.product p " +
-        "WHERE p.uuid =: uuid AND pv.size = :size AND pv.colour = :colour AND pv.price = :price"
+        "WHERE p.uuid = :uuid AND pv.size = :size AND pv.colour = :colour AND pv.price = :price"
     ) boolean existsBySizeAndColourAndPrice(
         @Param("uuid") UUID uuid,
         @Param("size") SizeEnum size,
