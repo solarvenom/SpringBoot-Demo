@@ -14,6 +14,8 @@ public class ProductVariantDto {
 
     private String ean;
 
+    private Integer stock;
+
     public ProductVariantDto() {}
 
     public ProductVariantDto(
@@ -21,13 +23,15 @@ public class ProductVariantDto {
         SizeEnum size,
         Float price,
         String sku,
-        String ean
+        String ean,
+        Integer stock
     ) {
         this.colour = colour;
         this.size = size;
         this.price = price;
         this.sku = sku;
         this.ean = ean;
+        this.stock = stock;
     }
 
     public ColourEnum getColour() {
@@ -48,5 +52,9 @@ public class ProductVariantDto {
 
     public String getEan(){
         return ean;
+    }
+
+    public Integer getStock(){
+        return stock;
     }
 }

@@ -19,8 +19,11 @@ public class CreateProductVariantDto {
     @NotBlank(message = "ProductVariant price is required.")
     private Float price;
 
-    @NotBlank(message = "Product UUID is required")
+    @NotBlank(message = "Product UUID is required.")
     private UUID productUuid;
+
+    @NotBlank(message = "ProductVariant stock is required.")
+    private Integer stock;
 
     public CreateProductVariantDto() {}
 
@@ -28,12 +31,14 @@ public class CreateProductVariantDto {
         ColourEnum colour,
         SizeEnum size,
         Float price,
-        UUID productUuid
+        UUID productUuid,
+        Integer stock
     ) {
         this.colour = colour;
         this.size = size;
         this.price = price;
         this.productUuid = productUuid;
+        this.stock = stock;
     }
 
     public ColourEnum getColour() {
@@ -66,5 +71,13 @@ public class CreateProductVariantDto {
 
     public void setProductUuid(UUID productUuid){
         this.productUuid = productUuid;
+    }
+
+    public Integer getStock(){
+        return stock;
+    }
+
+    public void setStock(Integer stock){
+        this.stock = stock;
     }
 }

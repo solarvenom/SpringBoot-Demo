@@ -44,6 +44,9 @@ public class ProductVariantEntity {
     @Column(nullable = false)
     private Float price;
 
+    @Column(nullable = false)
+    private Integer stock;
+
     @Column(unique = true, nullable = false)
     private String sku;
 
@@ -101,6 +104,14 @@ public class ProductVariantEntity {
 
     public Float getPrice(){
         return price;
+    }
+
+    public Integer getStock(){
+        return stock;
+    }
+
+    public void setStock(Integer stock){
+        this.stock = stock;
     }
 
     public String getSku(){
