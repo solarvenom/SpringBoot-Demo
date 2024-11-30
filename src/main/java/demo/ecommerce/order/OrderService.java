@@ -36,4 +36,11 @@ public class OrderService {
         order.setProductVariant(productVariant);
         return this.orderRepository.save(order);
     }
+
+    public void deleteOrder(UUID uuid){
+        if(!this.orderRepository.existsByUuid(uuid)){
+            throw new IllegalArgumentException("Order with UUID " + uuid + " does not exist.");
+        }
+        this.orderRepository.deleteByUuid(uuid);
+    }
 }

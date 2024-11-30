@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-import demo.ecommerce.api.ApiError;
+import demo.ecommerce.api.errors.ApiError;
 import demo.ecommerce.product.dtos.CreateProductVariantDto;
 import demo.ecommerce.product.dtos.ProductDto;
 import demo.ecommerce.product.entities.ProductEntity;
