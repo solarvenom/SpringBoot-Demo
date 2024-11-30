@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import demo.ecommerce.product.dtos.CreateProductVariantDto;
 import demo.ecommerce.product.dtos.ProductDto;
+import demo.ecommerce.product.dtos.UpdateProductDto;
 import demo.ecommerce.product.entities.ProductEntity;
 import demo.ecommerce.product.entities.ProductVariantEntity;
 import demo.ecommerce.product.repositories.ProductRepository;
@@ -34,11 +35,35 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    public ProductEntity updateProduct(UUID uuid, UpdateProductDto productDto){
+        if(!this.productRepository.existsByUuid(uuid)){
+            throw new IllegalArgumentException("Product with UUID " + uuid + " does not exist.");
+        }
+        ProductEntity product = this.productRepository.findByUuid(uuid);
+        product.setName(productDto.getName());
+        product.setDescription(productDto.getDescription());
+        return this.productRepository.save(product);
+    }
+
+    public void deleteProduct(UUID uuid){
+        if(!this.productRepository.existsByUuid(uuid)){
+            throw new IllegalArgumentException("Product with UUID " + uuid + " does not exist.");
+        }
+        this.productRepository.deleteByUuid(uuid);
+    }
+
     public List<ProductVariantEntity> getProductVariants(String searchTerm) {
         if(searchTerm != null){
             return this.productVariantRepository.findBySearchTerm(searchTerm);
         }
         return this.productVariantRepository.findAll();
+    }
+
+    public List<ProductVariantEntity> getVariantsByProduct(UUID uuid){
+        if(!this.productRepository.existsByUuid(uuid)){
+            throw new IllegalArgumentException("Product with UUID " + uuid + " does not exist.");
+        }
+        return this.productVariantRepository.findByProductUuid(uuid);
     }
 
     public ProductVariantEntity createProductVariant(
@@ -63,5 +88,12 @@ public class ProductService {
         );
         productVariant.setProduct(product);
         return this.productVariantRepository.save(productVariant);
+    }
+
+    public void deleteProductVariant(UUID uuid){
+        if(!this.productVariantRepository.existsByUuid(uuid)){
+            throw new IllegalArgumentException("ProductVariant with UUID " + uuid + " does not exist.");
+        }
+        this.productVariantRepository.deleteByUuid(uuid);
     }
 }

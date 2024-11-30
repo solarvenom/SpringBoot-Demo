@@ -34,4 +34,14 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariantEn
     );
 
     ProductVariantEntity findByUuid(UUID uuid);
+
+    @Query(
+        "SELECT pv FROM ProductVariantEntity pv " +
+        "JOIN pv.product p " +
+        "WHERE p.uuid = :uuid"
+    ) List<ProductVariantEntity> findByProductUuid(@Param("uuid") UUID uuid);
+
+    boolean existsByUuid(UUID uuid);
+
+    void deleteByUuid(UUID uuid);
 }
