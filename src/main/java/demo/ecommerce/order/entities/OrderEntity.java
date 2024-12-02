@@ -38,6 +38,9 @@ public class OrderEntity {
     @Column(updatable = true, nullable = true)
     private Instant deletedDate;
 
+    @Column(updatable = true, nullable = true)
+    private String mapping;
+
     @PrePersist
     public void generateUuid() {
         if (uuid == null) {
@@ -73,5 +76,13 @@ public class OrderEntity {
 
     public void setDeletedDate(Instant deletedDate){
         this.deletedDate = deletedDate;
+    }
+
+    public String getMapping(){
+        return mapping;
+    }
+
+    public void setMapping(String mapping){
+        this.mapping = mapping;
     }
 }

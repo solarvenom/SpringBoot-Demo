@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,11 +26,13 @@ public class OrderController {
         this.orderService = orderService;
     }
   
+    @CrossOrigin(origins = "*")
     @GetMapping("/orders")
     public List<OrderEntity> getOrders() {
         return this.orderService.getAllOrders();
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping("/orders")
     public ResponseEntity<?> createOrder(@RequestBody CreateOrderDto orderDto) {
         try {
@@ -42,6 +45,7 @@ public class OrderController {
         }
     }
 
+    @CrossOrigin(origins = "*")
     @DeleteMapping("/orders")
     public ResponseEntity<?> deleteOrder(@RequestBody DeleteOrderDto orderDto) {
         try {
