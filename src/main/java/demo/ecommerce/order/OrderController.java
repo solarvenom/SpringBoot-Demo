@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import demo.ecommerce.api.errors.ApiError;
 import demo.ecommerce.order.dtos.CreateOrderDto;
 import demo.ecommerce.order.dtos.DeleteOrderDto;
 import demo.ecommerce.order.entities.OrderEntity;
 
+@RestController
 public class OrderController {
 
     @Autowired

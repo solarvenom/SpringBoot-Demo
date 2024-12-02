@@ -21,13 +21,9 @@ const ProductVariantColumns: TableColumn[] = [
 ];
 
 const OrdersColumns: TableColumn[] = [
-    { header: "Product Name", accessor: 'product["name"]' },
-    { header: "Colour", accessor: "colour"},
-    { header: "Size", accessor: "size"},
-    { header: "Price", accessor: "price"},
-    { header: "Stock", accessor: "stock"},
-    { header: "SKU", accessor: "sku"},
-    { header: "EAN", accessor: "ean"},
+    { header: "Mapping", accessor: 'mapping' },
+    { header: "Created Date", accessor: "created_date"},
+    { header: "Deleted", accessor: "deleted_date"},
     { header: "Options", accessor: "options"}
 ];
 
