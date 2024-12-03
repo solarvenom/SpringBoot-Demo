@@ -4,29 +4,26 @@ import { TableColumn } from '../types'
 import { TableComponent } from './TableComponent';
 
 const ProductColumns: TableColumn[] = [
-    { header: "Name", accessor: "name" },
-    { header: "Description", accessor: "description"},
-    { header: "Options", accessor: "options"}
+    { header: "Product Name", accessor: "name" },
+    { header: "Description", accessor: "description"}
 ];
 
 const ProductVariantColumns: TableColumn[] = [
-    { header: "Product Name", accessor: 'product["name"]' },
+    { header: "Product Name", accessor: "name" },
     { header: "Colour", accessor: "colour"},
     { header: "Size", accessor: "size"},
     { header: "Price", accessor: "price"},
     { header: "Stock", accessor: "stock"},
     { header: "SKU", accessor: "sku"},
-    { header: "EAN", accessor: "ean"},
-    { header: "Options", accessor: "options"}
+    { header: "EAN", accessor: "ean"}
 ];
 
 const OrdersColumns: TableColumn[] = [
-    { header: "Mapping", accessor: 'mapping' },
-    { header: "Created Date", accessor: "created_date"},
-    { header: "Deleted", accessor: "deleted_date"},
-    { header: "Options", accessor: "options"}
+    { header: "Product Name", accessor: "name" },
+    { header: "Mapping", accessor: "mapping" },
+    { header: "Created Date", accessor: "createdDate"},
+    { header: "Status", accessor: "status"}
 ];
-
 
 const TabsPanel: React.FC = () => {
     const [activeTab, setActiveTab] = useState<number>(0);
@@ -39,6 +36,53 @@ const TabsPanel: React.FC = () => {
       { id: 1, label: 'Variants', apiEndpoint: 'http://localhost:8080/product-variants?searchTerm=' },
       { id: 2, label: 'Orders', apiEndpoint: 'http://localhost:8080/orders' },
     ];
+
+    const setTableData = (activeTab: number, data: any) => {
+        if(activeTab == 1) {
+            setData(data.map((variant: any) => {
+                return {
+                    ...variant, 
+                    name: variant.product.name,
+                    endpoint: "http://localhost:8080/product-variants"
+                }
+            }))
+        } else if (activeTab == 2) {
+            setData(data.map((order: any) => {
+                return {
+                    ...order,
+                    name: order.productVariant.product.name,
+                    status: order.deletedDate ? "Canceled" : "Active",
+                    endpoint: "http://localhost:8080/orders"
+                }
+            }))
+        } else {
+            setData(data.map((product: any) => {
+                return {
+                    ...product,
+                    endpoint: "http://localhost:8080/products"
+                }
+            }));
+        }
+    }
+
+    const generateDeletionHandler = (activeTab: number, refreshEndpoint: string) => {
+        return async (deletinEndpoint: string, uuid: string) => {
+            try {
+                const response = await fetch(`${deletinEndpoint}/${uuid}`, {
+                    method: "DELETE"
+                });
+                
+                if (!response.ok) {
+                    alert(`Failed to delete entity with UUID ${uuid}.`);
+                }
+                const updatedData = await fetch(refreshEndpoint);
+                setTableData(activeTab, updatedData);
+            } catch (error) {
+                console.error("Error deleting entity:", error);
+                alert(`Error deleting entity with UUID ${uuid}.`);
+            }
+        }
+    };
   
     useEffect(() => {
         const fetchData = async () => {
@@ -51,7 +95,8 @@ const TabsPanel: React.FC = () => {
                     const response = await fetch(activeTabDetails.apiEndpoint);
                     if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
                     const result = await response.json();
-                    setData(result);
+
+                    setTableData(activeTab, result);
                 }
             } catch (err) {
                 setError(err instanceof Error ? err.message : 'An unknown error occurred');
@@ -66,7 +111,7 @@ const TabsPanel: React.FC = () => {
         <div className='content' style={{ display: 'flex', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
             <div className='tabPanel' style={{ display: 'flex', marginBottom: '20px' }}>
                 {tabs.map(tab => (
-                    <button 
+                    <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         style={{
@@ -85,9 +130,9 @@ const TabsPanel: React.FC = () => {
     
             <div className='dataPanel'>
                 {
-                    activeTab === 0 ? (<TableComponent columns={ProductColumns} data={data} />) : 
-                    activeTab === 1 ? (<TableComponent columns={ProductVariantColumns} data={data} />) : 
-                    activeTab === 2 ? (<TableComponent columns={OrdersColumns} data={data} />) : null
+                    activeTab === 0 ? (<TableComponent columns={ProductColumns} data={data} deletionHandler={generateDeletionHandler(activeTab, tabs[activeTab].apiEndpoint)} />) : 
+                    activeTab === 1 ? (<TableComponent columns={ProductVariantColumns} data={data} deletionHandler={generateDeletionHandler(activeTab, tabs[activeTab].apiEndpoint)} />) : 
+                    activeTab === 2 ? (<TableComponent columns={OrdersColumns} data={data} deletionHandler={generateDeletionHandler(activeTab, tabs[activeTab].apiEndpoint)} />) : null
                 }
             </div>
         </div>
@@ -95,4 +140,3 @@ const TabsPanel: React.FC = () => {
 };
   
 export default TabsPanel;
-  

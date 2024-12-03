@@ -8,4 +8,5 @@ export type TableColumn = {
 export type TableProps = {
     columns: TableColumn[];
     data: ApiData[] | null;
+    deletionHandler: any;
   };
