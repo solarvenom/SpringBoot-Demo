@@ -25,6 +25,13 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
+    public List<OrderEntity> searchOrders(String searchTerm){
+        if(searchTerm != null){
+            return this.orderRepository.findBySearchTerm(searchTerm);
+        }
+        return this.orderRepository.findAll();
+    }
+
     @Transactional
     public OrderEntity createOrder(CreateOrderDto orderDto){
         ProductVariantEntity productVariant = this.productVariantRepository.findByUuid(orderDto.getProductVariantUuid());

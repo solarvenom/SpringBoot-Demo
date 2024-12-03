@@ -29,6 +29,5 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
         "SELECT p FROM ProductEntity p " +
         "WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
         "OR LOWER(p.description) LIKE LOWER(CONCAT('%', :searchTerm, '%'))"
-    ) 
-    List<ProductEntity> findBySearchTerm(String searchTerm);
+    ) List<ProductEntity> findBySearchTerm(String searchTerm);
 }
