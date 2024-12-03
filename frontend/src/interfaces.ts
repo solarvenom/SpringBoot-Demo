@@ -9,3 +9,7 @@ export interface Tab {
     label: string;
     apiEndpoint: string;
 };
+
+export interface SearchBarProps {
+    onSearch: (value: string) => void;
+}

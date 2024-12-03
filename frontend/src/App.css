@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #f8f8f2;
   font-size: 15px;
 }
 
@@ -18,41 +18,65 @@
 .content {
   display: flex;
   padding: 20px;
-  border: 1px solid #ccc;
+  border: 1px solid #8be9fd;
   border-radius: 8px;
   height: 90vh;
   width: 1100px;
 }
 
 .tabPanel {
-  justify-content: space-evenly;
-  flex-direction: row;
+  justify-content: flex-start;
+  flex-direction: column;
+  display: flex; 
+  margin-bottom: 20px;
+  width: 450px;
+}
+
+.tabButtons {
+  display:flex;
 }
 
 .tabPanel button {
   height: 40px;
+  font-weight: bold;
 }
 
 .dataPanel {
-  padding: 20px;
-  border: 1px solid #ccc;
+  border: 1px solid #8be9fd;
   border-radius: 8px;
   width: 100%;
+  overflow: hidden;
+}
+
+.tableWrapper{
+  margin: 20px;
+  height: 100%;
   overflow: auto;
+  border-top: 1px solid #ddd;
 }
 
 table {
   border-collapse: collapse;
   width: 100%;
+  margin-bottom: 40px;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+  background-color:#282c34;
+  z-index: 1;
+  border-bottom: 1px solid #ddd;
 }
 
 table button {
   padding: 5px 10px;
   color: white;
-  background-color: red;
+  background-color: #ff5555;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 table button:disabled {
@@ -62,7 +86,9 @@ table button:disabled {
 }
 
 th {
-  border: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-right: 1px solid #ddd;
   padding: 8px;
 }
 
@@ -77,4 +103,32 @@ table th:last-child, table td:last-child {
 
 table th:nth-last-child(2), table td:nth-last-child(2) {
   border-right: none;
+}
+
+.searchbar {
+  margin-top: 40px;
+  width: 100%;
+}
+
+.searchbar input {
+  height: 35px;
+  width: 275px;
+  float: left;
+  padding: 0 10px;
+  background-color: #282c34;
+  border: 1px solid #8be9fd;
+  border-radius: 8px;
+  color: #8be9fd;
+}
+
+.searchbar input::placeholder {
+  color: #8be9fd;
+  opacity: 1; /* Firefox */
+}
+
+.searchbar input:focus, textarea:focus {
+  outline: none;
+  border: 2px solid #ff5555;
+  color: #ff5555;
+  font-weight: bold;
 }
