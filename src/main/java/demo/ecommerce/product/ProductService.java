@@ -24,7 +24,10 @@ public class ProductService {
     @Autowired
     private ProductVariantRepository productVariantRepository;
    
-    public List<ProductEntity> getProducts() {
+    public List<ProductEntity> searchProducts(String searchTerm) {
+        if(searchTerm != null){
+            return this.productRepository.findBySearchTerm(searchTerm);
+        }
         return this.productRepository.findAll();
     }
 
@@ -51,10 +54,10 @@ public class ProductService {
         if(!this.productRepository.existsByUuid(uuid)){
             throw new IllegalArgumentException("Product with UUID " + uuid + " does not exist.");
         }
-        this.productRepository.deleteByUuid(uuid);
+        this.productRepository.softDeletedByUuid(uuid);
     }
 
-    public List<ProductVariantEntity> getProductVariants(String searchTerm) {
+    public List<ProductVariantEntity> searchProductVariants(String searchTerm) {
         if(searchTerm != null){
             return this.productVariantRepository.findBySearchTerm(searchTerm);
         }
@@ -97,6 +100,6 @@ public class ProductService {
         if(!this.productVariantRepository.existsByUuid(uuid)){
             throw new IllegalArgumentException("ProductVariant with UUID " + uuid + " does not exist.");
         }
-        this.productVariantRepository.deleteByUuid(uuid);
+        this.productVariantRepository.softDeletedByUuid(uuid);
     }
 }

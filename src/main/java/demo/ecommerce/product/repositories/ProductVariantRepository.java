@@ -47,9 +47,8 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariantEn
 
     void deleteByUuid(UUID uuid);
 
-
     @Modifying
     @Transactional
-    @Query(value = "UPDATE orders SET deleted_date = NOW() WHERE uuid = :uuid", nativeQuery = true)
+    @Query(value = "UPDATE product_variants SET deleted_date = NOW() WHERE uuid = :uuid", nativeQuery = true)
     void softDeletedByUuid(UUID uuid);
 }

@@ -34,8 +34,8 @@ public class ProductController {
 
   @CrossOrigin(origins = "*")
 	@GetMapping("/products")
-  public List<ProductEntity> getProducts() {
-    return this.productService.getProducts();
+  public List<ProductEntity> searchProducts(@RequestParam String searchTerm) {
+    return this.productService.searchProducts(searchTerm);
   }
 
   @CrossOrigin(origins = "*")
@@ -99,7 +99,7 @@ public class ProductController {
   @CrossOrigin(origins = "*")
 	@GetMapping("/product-variants")
   public List<ProductVariantEntity> getAllProductVariants(@RequestParam String searchTerm) {
-    return this.productService.getProductVariants(searchTerm);
+    return this.productService.searchProductVariants(searchTerm);
   }
 
   @CrossOrigin(origins = "*")

@@ -40,10 +40,16 @@ public class OrderService {
     }
 
     @Transactional
-    public void deleteOrder(UUID uuid){
+    public void softDeleteOrder(UUID uuid){
         if(!this.orderRepository.existsByUuid(uuid)){
             throw new IllegalArgumentException("Order with UUID " + uuid + " does not exist.");
         }
         this.orderRepository.softDeletedByUuid(uuid);
     }
+
+    @Transactional
+    public void softDeleteProductVariantOrders(UUID uuid){
+        this.orderRepository.softDeleteByProductVariantUuid(uuid);
+    }
+    
 }

@@ -51,7 +51,7 @@ public class OrderController {
     @DeleteMapping("/orders/{uuid}")
     public ResponseEntity<?> deleteOrder(@PathVariable UUID uuid) {
         try {
-            this.orderService.deleteOrder(uuid);
+            this.orderService.softDeleteOrder(uuid);
             return ResponseEntity.status(HttpStatus.OK).body("Order with UUID " + uuid + " has been deleted.");
         } catch(IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(
