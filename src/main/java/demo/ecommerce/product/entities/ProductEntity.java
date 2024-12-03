@@ -7,7 +7,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+
+import java.time.Instant;
 import java.util.UUID;
+
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Table(name="products")
@@ -25,6 +29,13 @@ public class ProductEntity {
 
     @Column(nullable = false)
     private String description;
+
+    @CreatedDate
+    @Column(updatable = false, nullable = false)
+    private Instant createdDate;
+
+    @Column(updatable = true, nullable = true)
+    private Instant deletedDate;
 
     @PrePersist
     public void generateUuid() {
@@ -62,4 +73,17 @@ public class ProductEntity {
     public void setDescription(String description){
         this.description = description;
     }
+
+    public Instant getCreatedDate(){
+        return createdDate;
+    }
+
+    public Instant getDeletedDate(){
+        return deletedDate;
+    }
+
+    public void setDeletedDate(Instant deletedDate){
+        this.deletedDate = deletedDate;
+    }
+
 }

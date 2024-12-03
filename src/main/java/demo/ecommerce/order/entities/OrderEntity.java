@@ -14,7 +14,6 @@ import org.springframework.data.annotation.CreatedDate;
 import java.time.Instant;
 import java.util.UUID;
 
-import demo.ecommerce.api.helpers.Helpers;
 import demo.ecommerce.product.entities.ProductVariantEntity;
 
 @Entity
@@ -49,11 +48,7 @@ public class OrderEntity {
         }
 
         if(mapping == null) {
-            mapping = Helpers.generateSku(
-                productVariant.getProduct(),
-                productVariant.getSize(),
-                productVariant.getColour()
-            );
+            mapping = UUID.randomUUID().toString();
         }
     }
 

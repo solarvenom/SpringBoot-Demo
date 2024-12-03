@@ -1,6 +1,7 @@
 package demo.ecommerce.product.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.UUID;
 import demo.ecommerce.product.entities.ProductVariantEntity;
 import demo.ecommerce.product.enums.ColourEnum;
 import demo.ecommerce.product.enums.SizeEnum;
+import jakarta.transaction.Transactional;
 
 public interface ProductVariantRepository extends JpaRepository<ProductVariantEntity, Long> {
     
@@ -44,4 +46,10 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariantEn
     boolean existsByUuid(UUID uuid);
 
     void deleteByUuid(UUID uuid);
+
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE orders SET deleted_date = NOW() WHERE uuid = :uuid", nativeQuery = true)
+    void softDeletedByUuid(UUID uuid);
 }

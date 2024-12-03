@@ -39,10 +39,11 @@ public class OrderService {
         return this.orderRepository.save(order);
     }
 
+    @Transactional
     public void deleteOrder(UUID uuid){
         if(!this.orderRepository.existsByUuid(uuid)){
             throw new IllegalArgumentException("Order with UUID " + uuid + " does not exist.");
         }
-        this.orderRepository.deleteByUuid(uuid);
+        this.orderRepository.softDeletedByUuid(uuid);
     }
 }

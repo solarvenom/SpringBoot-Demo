@@ -9,13 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import demo.ecommerce.api.errors.ApiError;
 import demo.ecommerce.order.dtos.CreateOrderDto;
-import demo.ecommerce.order.dtos.DeleteOrderDto;
 import demo.ecommerce.order.entities.OrderEntity;
 
 @RestController
@@ -48,10 +48,9 @@ public class OrderController {
     }
 
     @CrossOrigin(origins = "*")
-    @DeleteMapping("/orders")
-    public ResponseEntity<?> deleteOrder(@RequestBody DeleteOrderDto orderDto) {
+    @DeleteMapping("/orders/{uuid}")
+    public ResponseEntity<?> deleteOrder(@PathVariable UUID uuid) {
         try {
-            UUID uuid = orderDto.getOrderUuid();
             this.orderService.deleteOrder(uuid);
             return ResponseEntity.status(HttpStatus.OK).body("Order with UUID " + uuid + " has been deleted.");
         } catch(IllegalArgumentException e){

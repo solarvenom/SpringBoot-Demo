@@ -2,6 +2,7 @@ package demo.ecommerce.product;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import demo.ecommerce.product.dtos.CreateProductVariantDto;
 import demo.ecommerce.product.dtos.ProductDto;
@@ -45,6 +46,7 @@ public class ProductService {
         return this.productRepository.save(product);
     }
 
+    @Transactional
     public void deleteProduct(UUID uuid){
         if(!this.productRepository.existsByUuid(uuid)){
             throw new IllegalArgumentException("Product with UUID " + uuid + " does not exist.");
@@ -90,6 +92,7 @@ public class ProductService {
         return this.productVariantRepository.save(productVariant);
     }
 
+    @Transactional
     public void deleteProductVariant(UUID uuid){
         if(!this.productVariantRepository.existsByUuid(uuid)){
             throw new IllegalArgumentException("ProductVariant with UUID " + uuid + " does not exist.");

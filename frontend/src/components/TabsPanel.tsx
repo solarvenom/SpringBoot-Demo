@@ -75,8 +75,9 @@ const TabsPanel: React.FC = () => {
                 if (!response.ok) {
                     alert(`Failed to delete entity with UUID ${uuid}.`);
                 }
-                const updatedData = await fetch(refreshEndpoint);
-                setTableData(activeTab, updatedData);
+                const updatedData = await fetch(refreshEndpoint, { method: "GET"});
+                const data = await updatedData.json()
+                setTableData(activeTab, data);
             } catch (error) {
                 console.error("Error deleting entity:", error);
                 alert(`Error deleting entity with UUID ${uuid}.`);
@@ -130,9 +131,25 @@ const TabsPanel: React.FC = () => {
     
             <div className='dataPanel'>
                 {
-                    activeTab === 0 ? (<TableComponent columns={ProductColumns} data={data} deletionHandler={generateDeletionHandler(activeTab, tabs[activeTab].apiEndpoint)} />) : 
-                    activeTab === 1 ? (<TableComponent columns={ProductVariantColumns} data={data} deletionHandler={generateDeletionHandler(activeTab, tabs[activeTab].apiEndpoint)} />) : 
-                    activeTab === 2 ? (<TableComponent columns={OrdersColumns} data={data} deletionHandler={generateDeletionHandler(activeTab, tabs[activeTab].apiEndpoint)} />) : null
+                    activeTab === 0 ? (
+                        <TableComponent 
+                            columns={ProductColumns} 
+                            data={data} 
+                            deletionHandler={generateDeletionHandler(activeTab, tabs[activeTab].apiEndpoint)} 
+                        />
+                    ) : activeTab === 1 ? (
+                        <TableComponent 
+                            columns={ProductVariantColumns} 
+                            data={data} 
+                            deletionHandler={generateDeletionHandler(activeTab, tabs[activeTab].apiEndpoint)} 
+                        />
+                    ) : activeTab === 2 ? (
+                        <TableComponent 
+                            columns={OrdersColumns} 
+                            data={data} 
+                            deletionHandler={generateDeletionHandler(activeTab, tabs[activeTab].apiEndpoint)} 
+                        />
+                    ) : null
                 }
             </div>
         </div>
