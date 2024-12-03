@@ -14,3 +14,11 @@ export interface SearchBarProps {
     onSearch: (value: string) => void;
     placeholderText: string;
 }
+
+export interface PopUpProps {
+    isOpen: boolean;
+    title: string;
+    children: React.ReactNode;
+    onClose: () => void;
+}
+  
