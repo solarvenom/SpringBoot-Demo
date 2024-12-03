@@ -22,6 +22,7 @@ const ProductVariantColumns: TableColumn[] = [
 const OrdersColumns: TableColumn[] = [
     { header: "Product Name", accessor: "name" },
     { header: "Mapping", accessor: "mapping" },
+    { header: "SKU", accessor: "sku"},
     { header: "Created Date", accessor: "createdDate"},
     { header: "Status", accessor: "status"}
 ];
@@ -33,12 +34,6 @@ const TabsPanel: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
   
-    const tabs: Tab[] = [
-      { id: 0, label: 'Products', apiEndpoint: `http://localhost:8080/products?searchTerm=${searchTerm}` },
-      { id: 1, label: 'Variants', apiEndpoint: `http://localhost:8080/product-variants?searchTerm=${searchTerm}` },
-      { id: 2, label: 'Orders', apiEndpoint: 'http://localhost:8080/orders' },
-    ];
-  
     useEffect(() => {
         fetchData();
     }, [activeTab]);
@@ -46,6 +41,12 @@ const TabsPanel: React.FC = () => {
     useEffect(()=>{
         fetchData();
     }, [searchTerm])
+
+    const tabs: Tab[] = [
+        { id: 0, label: 'Products', apiEndpoint: `http://localhost:8080/products?searchTerm=${searchTerm}` },
+        { id: 1, label: 'Variants', apiEndpoint: `http://localhost:8080/product-variants?searchTerm=${searchTerm}` },
+        { id: 2, label: 'Orders', apiEndpoint: `http://localhost:8080/orders?searchTerm=${searchTerm}` },
+    ];
 
     const fetchData = async () => {
         setLoading(true);
@@ -82,6 +83,8 @@ const TabsPanel: React.FC = () => {
                     ...order,
                     name: order.productVariant.product.name,
                     status: order.deletedDate ? "Canceled" : "Active",
+                    createdDate: formatDate(order.createdDate),
+                    sku: order.productVariant.sku,
                     endpoint: "http://localhost:8080/orders"
                 }
             }))
@@ -114,6 +117,20 @@ const TabsPanel: React.FC = () => {
             }
         }
     };
+
+    function formatDate(dateString: string) {
+        const date = new Date(dateString);
+      
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+      
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+      
+        return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+    }
   
     return (
         <div className='content'>
@@ -136,12 +153,21 @@ const TabsPanel: React.FC = () => {
                         </button>
                     ))}
                 </div>
-                {activeTab === 0 || activeTab === 1 ? (
-                    <SearchBar onSearch={(searchTerm)=>{
-                        console.log(`[[[ searchTerm: ${searchTerm} ]]]`)
-                        setSearchTerm(searchTerm)
-                    }}/>
-                    // <SearchBar onSearch={(kek)=>{fetchData()}}/>
+                { activeTab === 0 ? (
+                    <SearchBar 
+                        onSearch={(searchTerm)=>{setSearchTerm(searchTerm)}}
+                        placeholderText='Search by product name or description...'
+                    />
+                ) : activeTab === 1 ? (
+                    <SearchBar 
+                        onSearch={(searchTerm)=>{setSearchTerm(searchTerm)}}
+                        placeholderText='Search by product variant attributes...'
+                    />
+                ) : activeTab === 2 ? (
+                    <SearchBar 
+                        onSearch={(searchTerm)=>{setSearchTerm(searchTerm)}}
+                        placeholderText='Search by order attributes...'
+                    />
                 ) : null }
             </div>
     

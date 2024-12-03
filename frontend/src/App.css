@@ -132,3 +132,10 @@ table th:nth-last-child(2), table td:nth-last-child(2) {
   color: #ff5555;
   font-weight: bold;
 }
+
+.loading {
+  position: absolute;
+  top: 50%;
+  color: #ff5555;
+  font-weight: bold;
+}

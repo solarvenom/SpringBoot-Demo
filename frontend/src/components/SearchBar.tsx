@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { SearchBarProps } from '../interfaces'
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onSearch, placeholderText }) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>('');
   
@@ -27,7 +27,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     <div className="searchbar">
       <input
         type="text"
-        placeholder="Search by name or description..."
+        placeholder={placeholderText}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
