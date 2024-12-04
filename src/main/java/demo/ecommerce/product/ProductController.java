@@ -20,6 +20,7 @@ import demo.ecommerce.api.errors.ApiError;
 import demo.ecommerce.product.dtos.CreateProductVariantDto;
 import demo.ecommerce.product.dtos.ProductDto;
 import demo.ecommerce.product.dtos.UpdateProductDto;
+import demo.ecommerce.product.dtos.UpdateProductVariantDto;
 import demo.ecommerce.product.entities.ProductEntity;
 import demo.ecommerce.product.entities.ProductVariantEntity;
 
@@ -46,7 +47,7 @@ public class ProductController {
       return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     } catch(IllegalArgumentException e){
       return ResponseEntity.status(HttpStatus.CONFLICT).body(
-        new ApiError(HttpStatus.CONFLICT.value(), "Conflict", e.getMessage(), "@Post /products")
+        new ApiError(HttpStatus.CONFLICT.value(), "Conflict", e.getMessage(), "@POST /products")
       );
     }
   }
@@ -59,7 +60,7 @@ public class ProductController {
       return ResponseEntity.status(HttpStatus.OK).body(productVariants);
     } catch(IllegalArgumentException e){
       return ResponseEntity.status(HttpStatus.CONFLICT).body(
-        new ApiError(HttpStatus.CONFLICT.value(), "Conflict", e.getMessage(), "@Post /products")
+        new ApiError(HttpStatus.CONFLICT.value(), "Conflict", e.getMessage(), "@POST /products")
       );
     }
   }
@@ -75,7 +76,7 @@ public class ProductController {
       return ResponseEntity.status(HttpStatus.OK).body(updatedProduct);
     } catch(IllegalArgumentException e){
       return ResponseEntity.status(HttpStatus.CONFLICT).body(
-        new ApiError(HttpStatus.CONFLICT.value(), "Conflict", e.getMessage(), "@Put /products/" + uuid)
+        new ApiError(HttpStatus.CONFLICT.value(), "Conflict", e.getMessage(), "@PUT /products/" + uuid)
       );
     }
   }
@@ -88,7 +89,7 @@ public class ProductController {
       return ResponseEntity.status(HttpStatus.OK).body("Product deleted.");
     } catch(IllegalArgumentException e){
       return ResponseEntity.status(HttpStatus.CONFLICT).body(
-        new ApiError(HttpStatus.CONFLICT.value(), "Conflict", e.getMessage(), "@Delete /products/" + uuid)
+        new ApiError(HttpStatus.CONFLICT.value(), "Conflict", e.getMessage(), "@DELETE /products/" + uuid)
       );
     }
   }
@@ -126,9 +127,24 @@ public class ProductController {
       return ResponseEntity.status(HttpStatus.OK).body("ProductVariant deleted.");
     } catch(IllegalArgumentException e){
       return ResponseEntity.status(HttpStatus.CONFLICT).body(
-        new ApiError(HttpStatus.CONFLICT.value(), "Conflict", e.getMessage(), "@Delete /product-variants/" + uuid)
+        new ApiError(HttpStatus.CONFLICT.value(), "Conflict", e.getMessage(), "@DELETE /product-variants/" + uuid)
       );
     }
   }
   
+  @CrossOrigin(origins = "*")
+  @PutMapping("/product-variants/{uuid}")
+  public ResponseEntity<?> updateProductVariant(
+    @PathVariable UUID uuid,
+    @RequestBody UpdateProductVariantDto updateProductVariantDto
+    ){
+      try {
+        ProductVariantEntity updatedProductVariant = this.productService.updateProductVariant(uuid, updateProductVariantDto);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedProductVariant);
+      } catch(IllegalArgumentException e){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+          new ApiError(HttpStatus.CONFLICT.value(), "Conflict", e.getMessage(), "@PUT /product-variants/" + uuid)
+        );
+      }
+  } 
 }

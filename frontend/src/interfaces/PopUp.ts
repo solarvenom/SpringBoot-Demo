@@ -5,3 +5,7 @@ export interface PopUpProps {
     onClose: () => void;
     onSubmit: (data: any) => any;
 }
+
+export interface PopUpGeneratorProps {
+    
+}

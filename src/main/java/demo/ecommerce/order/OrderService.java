@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 import demo.ecommerce.order.dtos.CreateOrderDto;
+import demo.ecommerce.order.dtos.UpdateOrderDto;
 import demo.ecommerce.order.entities.OrderEntity;
 import demo.ecommerce.order.repositories.OrderRepository;
 import demo.ecommerce.product.entities.ProductVariantEntity;
@@ -61,6 +62,16 @@ public class OrderService {
     @Transactional
     public void softDeleteProductVariantOrders(UUID uuid){
         this.orderRepository.softDeleteByProductVariantUuid(uuid);
+    }
+
+    public OrderEntity updateOrderMapping(UUID uuid, UpdateOrderDto updateOrderDto){
+        if(!this.orderRepository.existsByUuid(uuid)){
+            throw new IllegalArgumentException("Order with UUID " + uuid + " does not exist.");
+        }
+
+        OrderEntity order = this.orderRepository.findByUuid(uuid);
+        order.setMapping(updateOrderDto.getMapping());
+        return this.orderRepository.save(order);
     }
     
 }

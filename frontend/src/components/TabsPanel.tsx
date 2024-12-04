@@ -223,8 +223,7 @@ const TabsPanel: React.FC = () => {
                                 {
                                     productVariants?.map((productVariant) => (
                                         <option key={productVariant.uuid} value={productVariant.uuid}>
-                                            {/* {productVariant.product.name} | {productVariant.sku} */}
-                                            {productVariant.uuid}
+                                            {productVariant.product.name} | {productVariant.sku}
                                         </option>
                                     ))
                                 }
@@ -247,18 +246,32 @@ const TabsPanel: React.FC = () => {
                                 columns={ProductColumns} 
                                 data={data} 
                                 deletionHandler={deletionHandler(activeTab, tabs[activeTab].apiEndpoint)} 
+                                updateHandler={submitionHandler(activeTab, tabs[activeTab].apiEndpoint, Url.PRODUCTS, RequestMethod.PUT)}
+                                popUpFields={[
+                                    { name: "name", label: "Update product name", placeholder: "Update name" },
+                                    { name: "description", label: "Update product description", placeholder: "Update description" }
+                                ]}
                             />
                         ) : activeTab === EntityIndex.PRODUCT_VARIANTS ? (
                             <TableComponent 
                                 columns={ProductVariantColumns} 
                                 data={data} 
-                                deletionHandler={deletionHandler(activeTab, tabs[activeTab].apiEndpoint)} 
+                                deletionHandler={deletionHandler(activeTab, tabs[activeTab].apiEndpoint)}
+                                updateHandler={submitionHandler(activeTab, tabs[activeTab].apiEndpoint, Url.PRODUCT_VARIANTS, RequestMethod.PUT)}
+                                popUpFields={[
+                                    { name: "stock", label: "Update product variant stock quantity", placeholder: "Update stock" },
+                                    { name: "price", label: "Update product variant price", placeholder: "Update price" }
+                                ]}
                             />
                         ) : activeTab === EntityIndex.ORDERS ? (
                             <TableComponent 
                                 columns={OrdersColumns} 
                                 data={data} 
                                 deletionHandler={deletionHandler(activeTab, tabs[activeTab].apiEndpoint)} 
+                                updateHandler={submitionHandler(activeTab, tabs[activeTab].apiEndpoint, Url.ORDERS, RequestMethod.PUT)}
+                                popUpFields={[
+                                    { name: "mapping", label: "Update order mapping", placeholder: "Update mapping" }
+                                ]}
                             />
                         ) : null
                     }

@@ -38,4 +38,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
         "OR LOWER(p.name) LIKE LOWER(CONCAT('%', :searchTerm, '%'))" +
         "OR LOWER(o.mapping) LIKE LOWER(CONCAT('%', :searchTerm, '%'))"
     ) List<OrderEntity> findBySearchTerm(@Param("searchTerm") String searchTerm);
+
+    OrderEntity findByUuid(UUID uuid);
 }

@@ -108,6 +108,10 @@ public class ProductVariantEntity {
         return price;
     }
 
+    public void setPrice(Double price){
+        this.price = price;
+    }
+
     public Integer getStock(){
         return stock;
     }

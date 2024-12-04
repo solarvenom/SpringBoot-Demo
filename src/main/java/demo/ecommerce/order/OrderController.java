@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import demo.ecommerce.api.errors.ApiError;
 import demo.ecommerce.order.dtos.CreateOrderDto;
+import demo.ecommerce.order.dtos.UpdateOrderDto;
 import demo.ecommerce.order.entities.OrderEntity;
 
 @RestController
@@ -57,6 +59,22 @@ public class OrderController {
         } catch(IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 new ApiError(HttpStatus.CONFLICT.value(), "Conflict", e.getMessage(), "@Delete /orders")
+            );
+        }
+    }
+
+    @CrossOrigin(origins = "*")
+    @PutMapping("/orders/{uuid}")
+    public ResponseEntity<?> updateOrderMapping(
+        @PathVariable UUID uuid,
+        @RequestBody UpdateOrderDto updateOrderDto
+    ) {
+        try {
+            OrderEntity updatedOrder = this.orderService.updateOrderMapping(uuid, updateOrderDto);
+            return ResponseEntity.status(HttpStatus.OK).body(updatedOrder);
+        } catch(IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                new ApiError(HttpStatus.CONFLICT.value(), "Conflict", e.getMessage(), "@PUT /orders")
             );
         }
     }

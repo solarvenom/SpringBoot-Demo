@@ -9,4 +9,12 @@ export type TableProps = {
     columns: TableColumn[];
     data: ApiData[] | null;
     deletionHandler: any;
+    updateHandler: (dataToSubmit: any, uuid?: any) => Promise<void>;
+    popUpFields: UpdateField[]
   };
+
+export type UpdateField = {
+  name: string;
+  label: string;
+  placeholder: string;
+}

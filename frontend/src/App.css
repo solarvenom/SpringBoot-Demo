@@ -72,11 +72,25 @@ thead {
 table button, .addButton {
   padding: 5px 10px;
   color: #ddd;
-  background-color: #ff5555;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
+}
+
+.tableUpdateButton {
+  background-color: #8be9fd;
+  color: #282c34;
+}
+
+.tableDeleteButton {
+  background-color: #ff5555;
+  color: #ddd;
+}
+
+.tableUpdateButton, .tableDeleteButton {
+  margin: 5px;
+  width: 65px;
 }
 
 table button:disabled {
@@ -154,7 +168,7 @@ table th:nth-last-child(2), table td:nth-last-child(2) {
 }
 
 .popUp input{
-  margin-top: 10px;
+  margin: 10px auto;
 }
 
 .popUp h3 {
@@ -173,10 +187,16 @@ table th:nth-last-child(2), table td:nth-last-child(2) {
   flex-direction: column;
 }
 
+.popUpContent label {
+  color: #8be9fd;
+  font-weight: bold;
+}
+
 .addButton {
   width: 70%;
   margin: 35px auto;
   transform: translate(-8%, 0);
+  background-color: #ff5555;
 }
 
 .popUpButtons {

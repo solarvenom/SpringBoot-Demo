@@ -20,6 +20,9 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariantEn
         "WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
         "OR LOWER(pv.colour) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
         "OR LOWER(pv.size) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
+        "OR LOWER(pv.sku) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
+        "OR LOWER(pv.ean) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
+        "OR CAST(pv.stock AS string) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
         "OR CAST(pv.price AS string) LIKE CONCAT('%', :searchTerm, '%')"
     ) List<ProductVariantEntity> findBySearchTerm(@Param("searchTerm") String searchTerm);
 
@@ -32,7 +35,6 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariantEn
         @Param("uuid") UUID uuid,
         @Param("size") SizeEnum size,
         @Param("colour") ColourEnum colour,
-        // @Param("price") Float price
         @Param("price") Double price
     );
 

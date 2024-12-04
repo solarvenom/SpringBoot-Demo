@@ -9,8 +9,8 @@ export const generateSubmitionHandler = (
             submitEndpoint: string,
             method: string
         ) => {
-            return async (dataToSubmit: any) => {
-                await fetch(submitEndpoint, {
+            return async (dataToSubmit: any, uuid?: string) => {
+                await fetch(uuid ? `${submitEndpoint}/${uuid}` : submitEndpoint, {
                     headers: {
                         'Accept': 'application/json, text/plain',
                         'Content-Type': 'application/json;charset=UTF-8'
@@ -25,4 +25,3 @@ export const generateSubmitionHandler = (
             }
         }
     }
-        

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import demo.ecommerce.product.dtos.CreateProductVariantDto;
 import demo.ecommerce.product.dtos.ProductDto;
 import demo.ecommerce.product.dtos.UpdateProductDto;
+import demo.ecommerce.product.dtos.UpdateProductVariantDto;
 import demo.ecommerce.product.entities.ProductEntity;
 import demo.ecommerce.product.entities.ProductVariantEntity;
 import demo.ecommerce.product.repositories.ProductRepository;
@@ -102,5 +103,21 @@ public class ProductService {
             throw new IllegalArgumentException("ProductVariant with UUID " + uuid + " does not exist.");
         }
         this.productVariantRepository.softDeletedByUuid(uuid);
+    }
+
+    public ProductVariantEntity updateProductVariant(UUID uuid, UpdateProductVariantDto updateProductVariantDto){
+        if(!this.productVariantRepository.existsByUuid(uuid)){
+            throw new IllegalArgumentException("ProductVariant with UUID " + uuid + " does not exist.");
+        }
+        ProductVariantEntity productVariant = this.productVariantRepository.findByUuid(uuid);
+        Double newPrice = updateProductVariantDto.getPrice();
+        if(newPrice != null){
+            productVariant.setPrice(newPrice);
+        }
+        Integer newStockQuantity = updateProductVariantDto.getStock();
+        if(newStockQuantity != null){
+            productVariant.setStock(newStockQuantity);
+        }
+        return this.productVariantRepository.save(productVariant);
     }
 }
