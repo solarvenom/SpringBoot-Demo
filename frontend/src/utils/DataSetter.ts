@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
-import { formatDate } from './';
+import { formatDate } from "./";
+import { Url } from "../const"
 
 export const createDataSetter = (setter: Dispatch<SetStateAction<any>>) => {
     return (activeTab: number, data: any) => {
@@ -8,7 +9,7 @@ export const createDataSetter = (setter: Dispatch<SetStateAction<any>>) => {
                 return {
                     ...variant, 
                     name: variant.product.name,
-                    endpoint: "http://localhost:8080/product-variants"
+                    endpoint: Url.PRODUCT_VARIANTS
                 }
             }))
         } else if (activeTab == 2) {
@@ -19,14 +20,14 @@ export const createDataSetter = (setter: Dispatch<SetStateAction<any>>) => {
                     status: order.deletedDate ? "Canceled" : "Active",
                     createdDate: formatDate(order.createdDate),
                     sku: order.productVariant.sku,
-                    endpoint: "http://localhost:8080/orders"
+                    endpoint: Url.ORDERS
                 }
             }))
         } else {
             setter(data.map((product: any) => {
                 return {
                     ...product,
-                    endpoint: "http://localhost:8080/products"
+                    endpoint: Url.PRODUCTS
                 }
             }));
         }

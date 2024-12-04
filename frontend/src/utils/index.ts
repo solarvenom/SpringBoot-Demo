@@ -1,3 +1,5 @@
 export { formatDate } from './DateFormatter'
 export { createDataSetter } from './DataSetter'
 export { generateDeletionHandler } from './DeletionHandler'
+export { generateSubmitionHandler } from './SubmitionHandler'
+export { reduceToUniqueProducts } from './UniqueValueReducer'

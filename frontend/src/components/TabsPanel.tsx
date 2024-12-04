@@ -1,32 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { ApiData, Tab } from '../interfaces'
-import { TableColumn } from '../types'
+import { ApiData, Tab, Product } from '../interfaces';
 import { TableComponent } from './TableComponent';
 import SearchBar from './SearchBar';
-import { createDataSetter, generateDeletionHandler } from '../utils';
-
-const ProductColumns: TableColumn[] = [
-    { header: "Product Name", accessor: "name" },
-    { header: "Description", accessor: "description"}
-];
-
-const ProductVariantColumns: TableColumn[] = [
-    { header: "Product Name", accessor: "name" },
-    { header: "Colour", accessor: "colour"},
-    { header: "Size", accessor: "size"},
-    { header: "Price", accessor: "price"},
-    { header: "Stock", accessor: "stock"},
-    { header: "SKU", accessor: "sku"},
-    { header: "EAN", accessor: "ean"}
-];
-
-const OrdersColumns: TableColumn[] = [
-    { header: "Product Name", accessor: "name" },
-    { header: "Mapping", accessor: "mapping" },
-    { header: "SKU", accessor: "sku"},
-    { header: "Created Date", accessor: "createdDate"},
-    { header: "Status", accessor: "status"}
-];
+import PopUp from './PopUp'
+import { Url, ProductColumns, ProductVariantColumns, OrdersColumns } from '../const';
+import { RequestMethod, Entity, EntityIndex } from '../enums';
+import { createDataSetter, generateDeletionHandler, generateSubmitionHandler, reduceToUniqueProducts } from '../utils';
 
 const TabsPanel: React.FC = () => {
     const [activeTab, setActiveTab] = useState<number>(0);
@@ -34,6 +13,8 @@ const TabsPanel: React.FC = () => {
     const [data, setData] = useState<ApiData[] | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
+    const [products, setProducts] = useState<Product[] | null>(null)
   
     useEffect(() => {
         fetchData();
@@ -44,10 +25,15 @@ const TabsPanel: React.FC = () => {
     }, [searchTerm])
 
     const tabs: Tab[] = [
-        { id: 0, label: 'Products', apiEndpoint: `http://localhost:8080/products?searchTerm=${searchTerm}` },
-        { id: 1, label: 'Variants', apiEndpoint: `http://localhost:8080/product-variants?searchTerm=${searchTerm}` },
-        { id: 2, label: 'Orders', apiEndpoint: `http://localhost:8080/orders?searchTerm=${searchTerm}` },
+        { id: EntityIndex.PRODUCTS, label: Entity.PRODUCTS, apiEndpoint: `${Url.SEARCH_PRODUCTS}${searchTerm}` },
+        { id: EntityIndex.PRODUCT_VARIANTS, label: Entity.PRODUCT_VARIANTS, apiEndpoint: `${Url.SEARCH_PRODUCT_VARIANTS}${searchTerm}` },
+        { id: EntityIndex.ORDERS, label: Entity.ORDERS, apiEndpoint: `${Url.SEARCH_ORDERS}${searchTerm}` },
     ];
+
+    const setTableData = createDataSetter(setData);
+    const deletionHandler = generateDeletionHandler(setTableData);
+    const submitionHandler = generateSubmitionHandler(setTableData);
+    const togglePopup = () => setIsPopupOpen(!isPopupOpen);
 
     const fetchData = async () => {
         setLoading(true);
@@ -61,6 +47,7 @@ const TabsPanel: React.FC = () => {
                 const result = await response.json();
 
                 setTableData(activeTab, result);
+                if(activeTab === EntityIndex.PRODUCT_VARIANTS) setProducts(reduceToUniqueProducts(result))
             }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An unknown error occurred');
@@ -68,9 +55,6 @@ const TabsPanel: React.FC = () => {
             setLoading(false);
         }
     };
-
-    const setTableData = createDataSetter(setData);
-    const deletionHandler = generateDeletionHandler(setTableData);
     
     return (
         <div className='content'>
@@ -93,21 +77,133 @@ const TabsPanel: React.FC = () => {
                         </button>
                     ))}
                 </div>
-                { activeTab === 0 ? (
+                { activeTab === EntityIndex.PRODUCTS ? (
                     <SearchBar 
                         onSearch={(searchTerm)=>{setSearchTerm(searchTerm)}}
                         placeholderText='Search by product name or description...'
                     />
-                ) : activeTab === 1 ? (
+                ) : activeTab === EntityIndex.PRODUCT_VARIANTS ? (
                     <SearchBar 
                         onSearch={(searchTerm)=>{setSearchTerm(searchTerm)}}
                         placeholderText='Search by product variant attributes...'
                     />
-                ) : activeTab === 2 ? (
+                ) : activeTab === EntityIndex.ORDERS ? (
                     <SearchBar 
                         onSearch={(searchTerm)=>{setSearchTerm(searchTerm)}}
                         placeholderText='Search by order attributes...'
                     />
+                ) : null }
+                { activeTab === EntityIndex.PRODUCTS ? (
+                    <div>
+                        <button 
+                            className="addButton"
+                            onClick={togglePopup}
+                        >
+                            Add Product
+                        </button>
+                        <PopUp 
+                            isOpen={isPopupOpen} 
+                            title="Add Product"
+                            onClose={togglePopup}
+                            onSubmit={submitionHandler(
+                                activeTab, 
+                                tabs[activeTab].apiEndpoint, 
+                                Url.PRODUCTS, 
+                                RequestMethod.POST)
+                            }
+                        >
+                            <input
+                                type="text"
+                                // value={inputData}
+                                // onChange={handleInputChange}
+                                name="name"
+                                placeholder="Enter product name"
+                            />
+                            <input
+                                type="text"
+                                // value={inputData}
+                                // onChange={handleInputChange}
+                                name="description"
+                                placeholder="Enter product description"
+                            />
+                        </PopUp>
+                    </div>
+                ) : activeTab === EntityIndex.PRODUCT_VARIANTS ? (
+                    <div>
+                        <button 
+                            className="addButton"
+                            onClick={togglePopup}
+                        >
+                            Add Product Variant
+                        </button>
+                        <PopUp 
+                            isOpen={isPopupOpen} 
+                            title="Add Product Variant"
+                            onClose={togglePopup}
+                            onSubmit={submitionHandler(
+                                activeTab, 
+                                tabs[activeTab].apiEndpoint, 
+                                Url.PRODUCT_VARIANTS, 
+                                RequestMethod.POST)
+                            }
+                        >
+                            <select
+                                className="selectDropdown"
+                                // value={selectedOption}
+                                // onChange={handleChange}
+                                name="productUuid"
+                                required
+                            >
+                                <option value="null" selected disabled hidden>Select a product</option>
+                                {
+                                    products?.map((product) => (
+                                        <option key={product.uuid} value={product.uuid}>{product.name}</option>
+                                    ))
+                                }
+                            </select>
+                            <select
+                                className="selectDropdown"
+                                // value={selectedOption}
+                                // onChange={handleChange}
+                                name="colour"
+                                required
+                            >
+                                <option value="null" selected disabled hidden>Select a colour</option>
+                                <option key="RED" value="RED">Red</option>
+                                <option key="GREEN" value="GREEN">Green</option>
+                                <option key="BLUE" value="BLUE">Blue</option>
+                            </select>
+                            <select
+                                className="selectDropdown"
+                                // value={selectedOption}
+                                // onChange={handleChange}
+                                name="size"
+                                required
+                            >
+                                <option value="null" selected disabled hidden>Select a size</option>
+                                <option key="L" value="L">Large</option>
+                                <option key="M" value="M">Medium</option>
+                                <option key="S" value="S">Small</option>
+                            </select>
+                            <input
+                                type="text"
+                                name="price"
+                                placeholder="Enter product variant price"
+                            />
+                            <input
+                                type="text"
+                                name="stock"
+                                placeholder="Enter product variant stock"
+                            />
+                        </PopUp>
+                    </div>
+                ) : activeTab === EntityIndex.ORDERS ? (
+                    <button 
+                        className="addButton"
+                        onClick={togglePopup}
+                    >
+                        Add Order
+                    </button>
                 ) : null }
             </div>
     
@@ -119,19 +215,19 @@ const TabsPanel: React.FC = () => {
                         ) : null
                     }
                     {
-                        activeTab === 0 ? (
+                        activeTab === EntityIndex.PRODUCTS ? (
                             <TableComponent 
                                 columns={ProductColumns} 
                                 data={data} 
                                 deletionHandler={deletionHandler(activeTab, tabs[activeTab].apiEndpoint)} 
                             />
-                        ) : activeTab === 1 ? (
+                        ) : activeTab === EntityIndex.PRODUCT_VARIANTS ? (
                             <TableComponent 
                                 columns={ProductVariantColumns} 
                                 data={data} 
                                 deletionHandler={deletionHandler(activeTab, tabs[activeTab].apiEndpoint)} 
                             />
-                        ) : activeTab === 2 ? (
+                        ) : activeTab === EntityIndex.ORDERS ? (
                             <TableComponent 
                                 columns={OrdersColumns} 
                                 data={data} 

@@ -1,0 +1,1 @@
+export type { TableColumn, TableProps } from "./TableTypes"

@@ -1,4 +1,4 @@
-import { ApiData } from './interfaces';
+import { ApiData } from '../interfaces';
 
 export type TableColumn = {
     header: string;
