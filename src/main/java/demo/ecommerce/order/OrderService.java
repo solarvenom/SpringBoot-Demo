@@ -34,7 +34,11 @@ public class OrderService {
 
     @Transactional
     public OrderEntity createOrder(CreateOrderDto orderDto){
-        ProductVariantEntity productVariant = this.productVariantRepository.findByUuid(orderDto.getProductVariantUuid());
+        UUID productVariantUuid = orderDto.getProductVariantUuid();
+        if(!this.productVariantRepository.existsByUuid(productVariantUuid)){
+            throw new IllegalArgumentException("Product variant " + productVariantUuid + " does not exist.");
+        }
+        ProductVariantEntity productVariant = this.productVariantRepository.findByUuid(productVariantUuid);
         Integer productVariantStock = productVariant.getStock();
         if(productVariantStock == 0){
             throw new IllegalArgumentException("Product variant " + productVariant.getSku() + " is out of stock.");

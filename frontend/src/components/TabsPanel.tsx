@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { ApiData, Tab, Product } from '../interfaces';
+import { ApiData, Tab, Product, ProductVariant } from '../interfaces';
 import { TableComponent } from './TableComponent';
 import SearchBar from './SearchBar';
 import PopUp from './PopUp'
 import { Url, ProductColumns, ProductVariantColumns, OrdersColumns } from '../const';
 import { RequestMethod, Entity, EntityIndex } from '../enums';
-import { createDataSetter, generateDeletionHandler, generateSubmitionHandler, reduceToUniqueProducts } from '../utils';
+import { 
+    createDataSetter, 
+    generateDeletionHandler, 
+    generateSubmitionHandler, 
+    reduceToUniqueProducts, 
+    reductToUniqueProductVariants 
+} from '../utils';
 
 const TabsPanel: React.FC = () => {
     const [activeTab, setActiveTab] = useState<number>(0);
@@ -15,6 +21,7 @@ const TabsPanel: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
     const [products, setProducts] = useState<Product[] | null>(null)
+    const [productVariants, setProductVariants] = useState<ProductVariant[] | null>(null)
   
     useEffect(() => {
         fetchData();
@@ -48,6 +55,7 @@ const TabsPanel: React.FC = () => {
 
                 setTableData(activeTab, result);
                 if(activeTab === EntityIndex.PRODUCT_VARIANTS) setProducts(reduceToUniqueProducts(result))
+                if(activeTab === EntityIndex.ORDERS) setProductVariants(reductToUniqueProductVariants(result))
             }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An unknown error occurred');
@@ -114,15 +122,11 @@ const TabsPanel: React.FC = () => {
                         >
                             <input
                                 type="text"
-                                // value={inputData}
-                                // onChange={handleInputChange}
                                 name="name"
                                 placeholder="Enter product name"
                             />
                             <input
                                 type="text"
-                                // value={inputData}
-                                // onChange={handleInputChange}
                                 name="description"
                                 placeholder="Enter product description"
                             />
@@ -149,8 +153,6 @@ const TabsPanel: React.FC = () => {
                         >
                             <select
                                 className="selectDropdown"
-                                // value={selectedOption}
-                                // onChange={handleChange}
                                 name="productUuid"
                                 required
                             >
@@ -163,8 +165,6 @@ const TabsPanel: React.FC = () => {
                             </select>
                             <select
                                 className="selectDropdown"
-                                // value={selectedOption}
-                                // onChange={handleChange}
                                 name="colour"
                                 required
                             >
@@ -175,8 +175,6 @@ const TabsPanel: React.FC = () => {
                             </select>
                             <select
                                 className="selectDropdown"
-                                // value={selectedOption}
-                                // onChange={handleChange}
                                 name="size"
                                 required
                             >
@@ -198,12 +196,41 @@ const TabsPanel: React.FC = () => {
                         </PopUp>
                     </div>
                 ) : activeTab === EntityIndex.ORDERS ? (
-                    <button 
-                        className="addButton"
-                        onClick={togglePopup}
-                    >
-                        Add Order
-                    </button>
+                    <div>
+                        <button 
+                            className="addButton"
+                            onClick={togglePopup}
+                        >
+                            Add Order
+                        </button>
+                        <PopUp 
+                            isOpen={isPopupOpen} 
+                            title="Add Order"
+                            onClose={togglePopup}
+                            onSubmit={submitionHandler(
+                                activeTab, 
+                                tabs[activeTab].apiEndpoint, 
+                                Url.ORDERS, 
+                                RequestMethod.POST)
+                            }
+                        >
+                            <select
+                                className="selectDropdown"
+                                name="productVariantUuid"
+                                required
+                            >
+                                <option value="null" selected disabled hidden>Select a product variant</option>
+                                {
+                                    productVariants?.map((productVariant) => (
+                                        <option key={productVariant.uuid} value={productVariant.uuid}>
+                                            {/* {productVariant.product.name} | {productVariant.sku} */}
+                                            {productVariant.uuid}
+                                        </option>
+                                    ))
+                                }
+                            </select>
+                        </PopUp>
+                    </div>
                 ) : null }
             </div>
     

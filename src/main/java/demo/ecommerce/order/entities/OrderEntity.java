@@ -9,6 +9,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.Instant;
@@ -31,6 +33,7 @@ public class OrderEntity {
     @Column(updatable = false, nullable = false, unique = true, columnDefinition = "UUID")
     private UUID uuid;
 
+    @CreationTimestamp
     @CreatedDate
     @Column(updatable = false, nullable = false)
     private Instant createdDate;
