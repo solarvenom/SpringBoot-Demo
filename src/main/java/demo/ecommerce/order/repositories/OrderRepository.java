@@ -11,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 import jakarta.transaction.Transactional;
 
 import demo.ecommerce.order.entities.OrderEntity;
-import demo.ecommerce.product.entities.ProductEntity;
 
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 

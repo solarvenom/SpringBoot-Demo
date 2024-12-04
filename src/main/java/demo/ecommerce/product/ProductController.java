@@ -82,10 +82,7 @@ public class ProductController {
 
   @CrossOrigin(origins = "*")
   @DeleteMapping("/products/{uuid}")
-  public ResponseEntity<?> deleteProduct(
-    @PathVariable UUID uuid,
-    @RequestBody UpdateProductDto updateProductDto
-  ) {
+  public ResponseEntity<?> deleteProduct(@PathVariable UUID uuid) {
     try {
       this.productService.deleteProduct(uuid);
       return ResponseEntity.status(HttpStatus.OK).body("Product deleted.");

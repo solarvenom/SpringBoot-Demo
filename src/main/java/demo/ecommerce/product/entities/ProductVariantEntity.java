@@ -15,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import java.time.Instant;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import demo.ecommerce.api.helpers.Helpers;
@@ -45,7 +46,7 @@ public class ProductVariantEntity {
     private SizeEnum size;
 
     @Column(nullable = false)
-    private Float price;
+    private Double price;
 
     @Column(nullable = false)
     private Integer stock;
@@ -56,6 +57,7 @@ public class ProductVariantEntity {
     @Column(unique = true, nullable = false)
     private String ean;
 
+    @CreationTimestamp
     @CreatedDate
     @Column(updatable = false, nullable = false)
     private Instant createdDate;
@@ -81,11 +83,13 @@ public class ProductVariantEntity {
     public ProductVariantEntity(
         ColourEnum colour,
         SizeEnum size,
-        Float price
+        Double price,
+        Integer stock
     ) {
         this.colour = colour;
         this.size = size;
         this.price = price;
+        this.stock = stock;
     }
 
     public UUID getUuid(){
@@ -100,7 +104,7 @@ public class ProductVariantEntity {
         return size;
     }
 
-    public Float getPrice(){
+    public Double getPrice(){
         return price;
     }
 

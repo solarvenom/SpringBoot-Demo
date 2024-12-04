@@ -32,7 +32,8 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariantEn
         @Param("uuid") UUID uuid,
         @Param("size") SizeEnum size,
         @Param("colour") ColourEnum colour,
-        @Param("price") Float price
+        // @Param("price") Float price
+        @Param("price") Double price
     );
 
     ProductVariantEntity findByUuid(UUID uuid);

@@ -89,7 +89,8 @@ public class ProductService {
         ProductVariantEntity productVariant = new ProductVariantEntity(
             createProductVariantDto.getColour(),
             createProductVariantDto.getSize(),
-            createProductVariantDto.getPrice()
+            createProductVariantDto.getPrice(),
+            createProductVariantDto.getStock()
         );
         productVariant.setProduct(product);
         return this.productVariantRepository.save(productVariant);

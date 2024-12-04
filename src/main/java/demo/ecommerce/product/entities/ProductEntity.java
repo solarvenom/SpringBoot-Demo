@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import java.time.Instant;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 @Entity
@@ -30,6 +31,7 @@ public class ProductEntity {
     @Column(nullable = false)
     private String description;
 
+    @CreationTimestamp
     @CreatedDate
     @Column(updatable = false, nullable = false)
     private Instant createdDate;
