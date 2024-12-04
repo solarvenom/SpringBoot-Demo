@@ -1,7 +1,7 @@
 #!/bin/bash
 source .env
 
-MIGRATIONS_DIR="./migrations"
+MIGRATIONS_DIR="./backend/migrations"
 
 for file in $(ls $MIGRATIONS_DIR | sort); do
     APPLIED=$(docker exec -i $DB_HOST psql -U $DB_USER -d $DB_NAME -tAc "SELECT 1 FROM migration_history WHERE filename = '$file'")
