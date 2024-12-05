@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import { RequestMethod } from "../enums"
 
 export const generateSubmitionHandler = (
@@ -7,9 +8,16 @@ export const generateSubmitionHandler = (
             activeTab: number, 
             refreshEndpoint: string,
             submitEndpoint: string,
-            method: string
+            method: string,
+            entitySetter?: Dispatch<SetStateAction<any>>
         ) => {
             return async (dataToSubmit: any, uuid?: string) => {
+                for(const key of Object.keys(dataToSubmit)){
+                    if(dataToSubmit[key] == "" || dataToSubmit[key] == undefined || dataToSubmit[key] == null){
+                        alert(`Field "${key}" cannot be empty.`)
+                        return
+                    }
+                }
                 await fetch(uuid ? `${submitEndpoint}/${uuid}` : submitEndpoint, {
                     headers: {
                         'Accept': 'application/json, text/plain',
@@ -22,6 +30,7 @@ export const generateSubmitionHandler = (
                 const updatedData = await fetch(refreshEndpoint, { method: RequestMethod.GET });
                 const data = await updatedData.json()
                 setter(activeTab, data);
+                if(entitySetter) entitySetter(data);
             }
         }
     }

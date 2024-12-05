@@ -1,5 +1,4 @@
 import './App.css';
-
 import TabsPanel from './components/TabsPanel';
 
 function App() {

@@ -1,18 +1,18 @@
 import { ProductVariant, Product, Order } from "../interfaces"
 
-export const reduceToUniqueProducts = (items: ProductVariant[]): Product[] => {
+export const reduceToUniqueProducts = (items: Product[]): Product[] => {
     return items.reduce<Product[]>((unique, item) => {
-      if (!unique.some((u) => u.uuid === item.product.uuid)) {
-        unique.push(item.product);
+      if (!unique.some((u) => u.uuid === item.uuid)) {
+        unique.push(item);
       }
       return unique;
     }, []);
   };
 
-export const reductToUniqueProductVariants = (items: Order[]): ProductVariant[] => {
+export const reduceToUniqueProductVariants = (items: ProductVariant[]): ProductVariant[] => {
   return items.reduce<ProductVariant[]>((unique, item) => {
-    if (!unique.some((u) => u.sku === item.productVariant.sku)) {
-      unique.push(item.productVariant);
+    if (!unique.some((u) => u.sku === item.sku)) {
+      unique.push(item);
     }
     return unique;
   }, []);

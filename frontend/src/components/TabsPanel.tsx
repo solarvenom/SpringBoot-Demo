@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { ApiData, Tab, Product, ProductVariant } from '../interfaces';
 import { TableComponent } from './TableComponent';
 import SearchBar from './SearchBar';
-import PopUp from './PopUp'
-import { Url, ProductColumns, ProductVariantColumns, OrdersColumns } from '../const';
+import PopUp from './PopUp';
+import { URL, ProductColumns, ProductVariantColumns, OrdersColumns } from '../const';
 import { RequestMethod, Entity, EntityIndex } from '../enums';
 import { 
     createDataSetter, 
     generateDeletionHandler, 
     generateSubmitionHandler, 
     reduceToUniqueProducts, 
-    reductToUniqueProductVariants 
+    reduceToUniqueProductVariants 
 } from '../utils';
 
 const TabsPanel: React.FC = () => {
@@ -32,9 +32,9 @@ const TabsPanel: React.FC = () => {
     }, [searchTerm])
 
     const tabs: Tab[] = [
-        { id: EntityIndex.PRODUCTS, label: Entity.PRODUCTS, apiEndpoint: `${Url.SEARCH_PRODUCTS}${searchTerm}` },
-        { id: EntityIndex.PRODUCT_VARIANTS, label: Entity.PRODUCT_VARIANTS, apiEndpoint: `${Url.SEARCH_PRODUCT_VARIANTS}${searchTerm}` },
-        { id: EntityIndex.ORDERS, label: Entity.ORDERS, apiEndpoint: `${Url.SEARCH_ORDERS}${searchTerm}` },
+        { id: EntityIndex.PRODUCTS, label: Entity.PRODUCTS, apiEndpoint: `${URL.SEARCH_PRODUCTS}${searchTerm}` },
+        { id: EntityIndex.PRODUCT_VARIANTS, label: Entity.PRODUCT_VARIANTS, apiEndpoint: `${URL.SEARCH_PRODUCT_VARIANTS}${searchTerm}` },
+        { id: EntityIndex.ORDERS, label: Entity.ORDERS, apiEndpoint: `${URL.SEARCH_ORDERS}${searchTerm}` },
     ];
 
     const setTableData = createDataSetter(setData);
@@ -54,8 +54,8 @@ const TabsPanel: React.FC = () => {
                 const result = await response.json();
 
                 setTableData(activeTab, result);
-                if(activeTab === EntityIndex.PRODUCT_VARIANTS) setProducts(reduceToUniqueProducts(result))
-                if(activeTab === EntityIndex.ORDERS) setProductVariants(reductToUniqueProductVariants(result))
+                if(activeTab === EntityIndex.PRODUCTS){ setProducts(reduceToUniqueProducts(result)) }
+                if(activeTab === EntityIndex.PRODUCT_VARIANTS) { setProductVariants(reduceToUniqueProductVariants(result)) }
             }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An unknown error occurred');
@@ -116,8 +116,9 @@ const TabsPanel: React.FC = () => {
                             onSubmit={submitionHandler(
                                 activeTab, 
                                 tabs[activeTab].apiEndpoint, 
-                                Url.PRODUCTS, 
-                                RequestMethod.POST)
+                                URL.PRODUCTS, 
+                                RequestMethod.POST,
+                                setProducts)
                             }
                         >
                             <input
@@ -147,8 +148,9 @@ const TabsPanel: React.FC = () => {
                             onSubmit={submitionHandler(
                                 activeTab, 
                                 tabs[activeTab].apiEndpoint, 
-                                Url.PRODUCT_VARIANTS, 
-                                RequestMethod.POST)
+                                URL.PRODUCT_VARIANTS, 
+                                RequestMethod.POST,
+                                setProductVariants)
                             }
                         >
                             <select
@@ -210,7 +212,7 @@ const TabsPanel: React.FC = () => {
                             onSubmit={submitionHandler(
                                 activeTab, 
                                 tabs[activeTab].apiEndpoint, 
-                                Url.ORDERS, 
+                                URL.ORDERS, 
                                 RequestMethod.POST)
                             }
                         >
@@ -246,7 +248,7 @@ const TabsPanel: React.FC = () => {
                                 columns={ProductColumns} 
                                 data={data} 
                                 deletionHandler={deletionHandler(activeTab, tabs[activeTab].apiEndpoint)} 
-                                updateHandler={submitionHandler(activeTab, tabs[activeTab].apiEndpoint, Url.PRODUCTS, RequestMethod.PUT)}
+                                updateHandler={submitionHandler(activeTab, tabs[activeTab].apiEndpoint, URL.PRODUCTS, RequestMethod.PUT)}
                                 popUpFields={[
                                     { name: "name", label: "Update product name", placeholder: "Update name" },
                                     { name: "description", label: "Update product description", placeholder: "Update description" }
@@ -257,7 +259,7 @@ const TabsPanel: React.FC = () => {
                                 columns={ProductVariantColumns} 
                                 data={data} 
                                 deletionHandler={deletionHandler(activeTab, tabs[activeTab].apiEndpoint)}
-                                updateHandler={submitionHandler(activeTab, tabs[activeTab].apiEndpoint, Url.PRODUCT_VARIANTS, RequestMethod.PUT)}
+                                updateHandler={submitionHandler(activeTab, tabs[activeTab].apiEndpoint, URL.PRODUCT_VARIANTS, RequestMethod.PUT)}
                                 popUpFields={[
                                     { name: "stock", label: "Update product variant stock quantity", placeholder: "Update stock" },
                                     { name: "price", label: "Update product variant price", placeholder: "Update price" }
@@ -268,7 +270,7 @@ const TabsPanel: React.FC = () => {
                                 columns={OrdersColumns} 
                                 data={data} 
                                 deletionHandler={deletionHandler(activeTab, tabs[activeTab].apiEndpoint)} 
-                                updateHandler={submitionHandler(activeTab, tabs[activeTab].apiEndpoint, Url.ORDERS, RequestMethod.PUT)}
+                                updateHandler={submitionHandler(activeTab, tabs[activeTab].apiEndpoint, URL.ORDERS, RequestMethod.PUT)}
                                 popUpFields={[
                                     { name: "mapping", label: "Update order mapping", placeholder: "Update mapping" }
                                 ]}
